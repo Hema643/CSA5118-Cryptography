@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+#include <math.h>
+
+ 
+
+int main(void){
+
+    long double log2keys=0;
+
+    for(int i=1;i<=25;i++) log2keys+=log2l((long double)i);
+
+    printf("Number of raw keys = 25!\n");
+
+    printf("log2(25!) = %.4Lf\n",log2keys);
+
+    printf("Therefore 25! is approximately 2^%.0Lf.\n",log2keys);
+
+    printf("If equivalent square symmetries are counted as one key,\n");
+
+    printf("the count is reduced by a small constant factor; its\n");
+
+    printf("approximate power of 2 remains close to 2^84.\n");
+
+    return 0;
+
+}
