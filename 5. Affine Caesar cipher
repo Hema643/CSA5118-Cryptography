@@ -1,0 +1,55 @@
+#include <stdio.h>
+
+#include <ctype.h>
+
+ 
+
+int gcd(int a,int b){ return b==0?a:gcd(b,a%b); }
+
+int inverse(int a){
+
+    for(int x=1;x<26;x++) if((a*x)%26==1) return x;
+
+    return -1;
+
+}
+
+int main(void){
+
+    char s[1000]; int a,b,choice;
+
+    printf("Enter a and b: "); scanf("%d%d",&a,&b);
+
+    a=(a%26+26)%26; b=(b%26+26)%26;
+
+    if(gcd(a,26)!=1){ printf("Invalid a: no modular inverse.\n"); return 1; }
+
+    printf("1 Encrypt, 2 Decrypt: "); scanf("%d",&choice);
+
+    getchar(); printf("Enter text: "); fgets(s,sizeof(s),stdin);
+
+    int inv=inverse(a);
+
+    for(int i=0;s[i];i++){
+
+        if(isupper((unsigned char)s[i])){
+
+            int x=s[i]-'A';
+
+            s[i]= choice==1 ? 'A'+(a*x+b)%26 : 'A'+(inv*(x-b+26))%26;
+
+        } else if(islower((unsigned char)s[i])){
+
+            int x=s[i]-'a';
+
+            s[i]= choice==1 ? 'a'+(a*x+b)%26 : 'a'+(inv*(x-b+26))%26;
+
+        }
+
+    }
+
+    printf("Result: %s",s);
+
+    return 0;
+
+}
