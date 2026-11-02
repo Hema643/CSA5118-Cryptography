@@ -1,0 +1,63 @@
+#include <stdio.h>
+
+#include <ctype.h>
+
+#include <string.h>
+
+ 
+
+int mod(int x){return (x%26+26)%26;}
+
+int invmod(int a){for(int x=1;x<26;x++)if(mod(a*x)==1)return x;return -1;}
+
+int main(void){
+
+    char s[1000],padded[1000]; int n=0;
+
+    int a=9,b=4,c=5,d=7;
+
+    int det=mod(a*d-b*c), inv=invmod(det);
+
+    if(inv<0){printf("Key matrix is not invertible.\n");return 1;}
+
+    int ia=mod(inv*d), ib=mod(-inv*b), ic=mod(-inv*c), id=mod(inv*a);
+
+    printf("Enter plaintext (letters only): ");fgets(s,sizeof(s),stdin);
+
+    for(int i=0;s[i];i++)if(isalpha((unsigned char)s[i]))
+
+        padded[n++]=toupper((unsigned char)s[i]);
+
+    if(n%2)padded[n++]='X';
+
+    printf("Ciphertext: ");
+
+    for(int i=0;i<n;i+=2){
+
+        int x=padded[i]-'A',y=padded[i+1]-'A';
+
+        putchar('A'+mod(a*x+b*y));putchar('A'+mod(c*x+d*y));
+
+    }
+
+    printf("\nDecryption check: ");
+
+    for(int i=0;i<n;i+=2){
+
+        int x; /* ciphertext pair is recomputed from plaintext */
+
+        int px=padded[i]-'A',py=padded[i+1]-'A';
+
+        int cx=mod(a*px+b*py),cy=mod(c*px+d*py);
+
+        x=mod(ia*cx+ib*cy); int y=mod(ic*cx+id*cy);
+
+        putchar('A'+x);putchar('A'+y);
+
+    }
+
+    printf("\n");
+
+    return 0;
+
+}
