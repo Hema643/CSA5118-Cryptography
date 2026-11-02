@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+#include <string.h>
+
+#include <ctype.h>
+
+ 
+
+int mod(int x){return (x%26+26)%26;}
+
+int main(void){
+
+    char plain[]="SENDMOREMONEY";
+
+    char target[]="CASHNOTNEEDED";
+
+    int key[13]={9,0,1,7,23,15,21,14,11,11,2,8,9};
+
+    char cipher[14]; int i;
+
+    printf("Encrypted ciphertext: ");
+
+    for(i=0;i<13;i++){
+
+        cipher[i]='A'+mod((plain[i]-'A')+key[i]);
+
+        putchar(cipher[i]);
+
+    }
+
+    cipher[13]='\0';
+
+    printf("\nKey to make this ciphertext decrypt as CASHNOTNEEDED:\n");
+
+    for(i=0;i<13;i++)
+
+        printf("%d ",mod((cipher[i]-'A')-(target[i]-'A')));
+
+    printf("\n");
+
+    return 0;
+
+}
+
