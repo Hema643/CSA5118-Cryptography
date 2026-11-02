@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+#include <ctype.h>
+
+ 
+
+int main(void){
+
+    char s[5000];
+
+    int f[26]={0};
+
+    printf("Enter ciphertext (one line): ");
+
+    fgets(s,sizeof(s),stdin);
+
+    for(int i=0;s[i];i++)
+
+        if(isalpha((unsigned char)s[i])) f[toupper((unsigned char)s[i])-'A']++;
+
+    printf("\nLetter frequencies:\n");
+
+    for(int i=0;i<26;i++)
+
+        printf("%c : %d\n",'A'+i,f[i]);
+
+    printf("\nUse the frequency ranking and common patterns (THE, AND, ING)\n");
+
+    printf("to build a substitution key, then replace letters manually.\n");
+
+    printf("Note: the ciphertext in the supplied image is not fully legible,\n");
+
+    printf("so this general helper accepts the exact ciphertext as input.\n");
+
+    return 0;
+
+}
