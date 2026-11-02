@@ -1,0 +1,41 @@
+#include <stdio.h>
+
+ 
+
+int mod(int x){return (x%26+26)%26;}
+
+int invmod(int x){for(int i=1;i<26;i++)if(mod(x*i)==1)return i;return -1;}
+
+int main(void){
+
+    int p00,p01,p10,p11,c00,c01,c10,c11;
+
+    int det,iv,ia,ib,ic,id;
+
+    printf("Enter plaintext matrix row-wise (4 numbers 0..25): ");
+
+    scanf("%d%d%d%d",&p00,&p01,&p10,&p11);
+
+    printf("Enter corresponding ciphertext matrix row-wise: ");
+
+    scanf("%d%d%d%d",&c00,&c01,&c10,&c11);
+
+    det=mod(p00*p11-p01*p10);iv=invmod(det);
+
+    if(iv<0){printf("Plaintext matrix has no inverse mod 26.\n");return 1;}
+
+    /* K = C * inverse(P), with row-vector convention adjusted below. */
+
+    ia=mod(iv*p11); ib=mod(-iv*p01);
+
+    ic=mod(-iv*p10); id=mod(iv*p00);
+
+    printf("Recovered key matrix:\n");
+
+    printf("%d %d\n",mod(c00*ia+c01*ic),mod(c00*ib+c01*id));
+
+    printf("%d %d\n",mod(c10*ia+c11*ic),mod(c10*ib+c11*id));
+
+    return 0;
+
+}
