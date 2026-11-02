@@ -1,0 +1,82 @@
+#include <stdio.h>
+
+#include <ctype.h>
+
+#include <string.h>
+
+ 
+
+char sq[5][5]={{'K','X','J','E','Y'},
+
+ {'U','R','E','B','Z'}, {'W','H','E','W','R'},
+
+ {'Y','T','U','H','E'}, {'Y','F','S','K','R'}};
+
+/* Replace the square above with the actual 5x5 square if your class
+
+   provides a keyword. This version uses a keyword entered by the user. */
+
+void build(char *key){
+
+    int used[26]={0},n=0; used['J'-'A']=1;
+
+    for(int pass=0;pass<2;pass++){
+
+        char *p=pass? "ABCDEFGHIKLMNOPQRSTUVWXYZ":key;
+
+        for(int i=0;p[i];i++){
+
+            char c=toupper((unsigned char)p[i]); if(c=='J')c='I';
+
+            if(c>='A'&&c<='Z'&&!used[c-'A']){
+
+                used[c-'A']=1; sq[n/5][n%5]=c; n++;
+
+            }
+
+        }
+
+    }
+
+}
+
+void find(char c,int *r,int *col){
+
+    if(c=='J')c='I';
+
+    for(int i=0;i<5;i++)for(int j=0;j<5;j++)
+
+        if(sq[i][j]==c){*r=i;*col=j;return;}
+
+}
+
+int main(void){
+
+    char key[100],s[1000]; int n=0;
+
+    printf("Enter Playfair keyword: "); scanf("%99s",key); build(key);
+
+    printf("Enter ciphertext (letters only): "); scanf("%999s",s);
+
+    for(int i=0;s[i]&&s[i+1];i+=2){
+
+        int r1,c1,r2,c2; char a=toupper(s[i]),b=toupper(s[i+1]);
+
+        find(a,&r1,&c1); find(b,&r2,&c2);
+
+        if(r1==r2){c1=(c1+4)%5;c2=(c2+4)%5;}
+
+        else if(c1==c2){r1=(r1+4)%5;r2=(r2+4)%5;}
+
+        else {int t=c1;c1=c2;c2=t;}
+
+        s[n++]=sq[r1][c1]; s[n++]=sq[r2][c2];
+
+    }
+
+    s[n]='\0'; printf("Decrypted text: %s\n",s);
+
+    return 0;
+
+}
+
