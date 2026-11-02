@@ -1,0 +1,49 @@
+#include <stdio.h>
+
+#include <ctype.h>
+
+#include <string.h>
+
+ 
+
+int main(void) {
+
+    char text[1000], key[200];
+
+    int j=0, n;
+
+    printf("Enter plaintext: ");
+
+    fgets(text,sizeof(text),stdin);
+
+    printf("Enter alphabetic key: ");
+
+    scanf("%199s",key);
+
+    n=(int)strlen(key);
+
+    for(int i=0;text[i];i++) {
+
+        if(isalpha((unsigned char)text[i])) {
+
+            int shift=toupper((unsigned char)key[j%n])-'A';
+
+            if(isupper((unsigned char)text[i]))
+
+                text[i]='A'+(text[i]-'A'+shift)%26;
+
+            else
+
+                text[i]='a'+(text[i]-'a'+shift)%26;
+
+            j++;
+
+        }
+
+    }
+
+    printf("Ciphertext: %s",text);
+
+    return 0;
+
+}
