@@ -1,0 +1,108 @@
+#include <stdio.h>
+
+#include <string.h>
+
+#include <ctype.h>
+
+ 
+
+char sq[5][5];
+
+ 
+
+void makeSquare(char *key) {
+
+    int used[26] = {0}, n = 0;
+
+    used['J' - 'A'] = 1;             /* I and J share one cell */
+
+    for (int pass = 0; pass < 2; pass++) {
+
+        char *s = pass == 0 ? key : "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+
+        for (int i = 0; s[i]; i++) {
+
+            char c = toupper((unsigned char)s[i]);
+
+            if (c == 'J') c = 'I';
+
+            if (c >= 'A' && c <= 'Z' && !used[c-'A']) {
+
+                used[c-'A'] = 1;
+
+                sq[n/5][n%5] = c;
+
+                n++;
+
+            }
+
+        }
+
+    }
+
+}
+
+void pos(char c, int *r, int *col) {
+
+    if (c == 'J') c = 'I';
+
+    for (*r=0; *r<5; (*r)++)
+
+        for (*col=0; *col<5; (*col)++)
+
+            if (sq[*r][*col] == c) return;
+
+}
+
+int main(void) {
+
+    char key[100], in[1000], p[1000], out[2000];
+
+    int n=0, m=0;
+
+    printf("Enter keyword: "); scanf("%99s", key);
+
+    makeSquare(key);
+
+    printf("Enter plaintext (letters only): "); scanf("%999s", in);
+
+    for (int i=0; in[i]; i++) if (isalpha((unsigned char)in[i])) {
+
+        char c=toupper((unsigned char)in[i]); if(c=='J') c='I';
+
+        p[n++]=c;
+
+    }
+
+    for (int i=0; i<n; ) {
+
+        char a=p[i++], b;
+
+        if (i==n) b='X';
+
+        else if (p[i]==a) b='X';
+
+        else b=p[i++];
+
+        int r1,c1,r2,c2;
+
+        pos(a,&r1,&c1); pos(b,&r2,&c2);
+
+        if (r1==r2) { c1=(c1+1)%5; c2=(c2+1)%5; }
+
+        else if (c1==c2) { r1=(r1+1)%5; r2=(r2+1)%5; }
+
+        else { int t=c1; c1=c2; c2=t; }
+
+        out[m++]=sq[r1][c1]; out[m++]=sq[r2][c2];
+
+    }
+
+    out[m]='\0';
+
+    printf("Ciphertext: %s\n",out);
+
+    return 0;
+
+}
+
