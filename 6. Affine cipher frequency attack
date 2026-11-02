@@ -1,0 +1,39 @@
+#include <stdio.h>
+
+#include <ctype.h>
+
+ 
+
+int mod(int x){ return (x%26+26)%26; }
+
+int main(void){
+
+    char s[2000];
+
+    /* Assumptions: most frequent ciphertext B represents E;
+
+       second most frequent U represents T. */
+
+    int a=3, b=15, inv=9; /* 4a+b=1 and 19a+b=20 (mod 26) */
+
+    printf("Enter affine ciphertext: ");
+
+    fgets(s,sizeof(s),stdin);
+
+    for(int i=0;s[i];i++){
+
+        if(isupper((unsigned char)s[i]))
+
+            s[i]='A'+mod(inv*((s[i]-'A')-b));
+
+        else if(islower((unsigned char)s[i]))
+
+            s[i]='a'+mod(inv*((s[i]-'a')-b));
+
+    }
+
+    printf("Decrypted text (frequency assumptions): %s",s);
+
+    return 0;
+
+}
